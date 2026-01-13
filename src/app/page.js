@@ -76,7 +76,7 @@ export default function Home() {
           <div className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-white/40 backdrop-blur-xl border border-white/50 shadow-2xl flex items-center justify-center">
              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/90 z-10" />
              {/* Abstract medical/science visual representation */}
-             <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=2866&q=80')] bg-cover bg-center opacity-80 mix-blend-overlay"></div>
+             <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1707944746620-fc0371b91906?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center opacity-80 mix-blend-overlay"></div>
              <div className="absolute z-20 bottom-10 left-10 text-left">
                 <p className="text-sm font-bold tracking-wider text-primary uppercase mb-2">Advanced Peptide Science</p>
                 <h3 className="text-3xl font-serif font-bold text-secondary">Enhancing Patient Outcomes</h3>
