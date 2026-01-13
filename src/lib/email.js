@@ -28,7 +28,8 @@ export async function sendOrderConfirmation(order) {
   const shippingCost = order.shippingCost || 0;
 
   const mailOptions = {
-    from: `"BioVibe Peptides" <${process.env.EMAIL_USER}>`,
+    from: `"BioVibe Peptides" <support@biovibepeptides.com>`,
+    replyTo: 'support@biovibepeptides.com',
     to: order.email,
     subject: `Order Invoice #${order._id?.toString().slice(-8).toUpperCase() || 'PENDING'} - BioVibe Peptides`,
     html: `
@@ -145,7 +146,8 @@ export async function sendInvoiceWithPDF(order, pdfBuffer) {
   const orderNumber = order._id?.toString().slice(-8).toUpperCase() || 'PENDING';
   
   const mailOptions = {
-    from: `"BioVibe Peptides" <${process.env.EMAIL_USER}>`,
+    from: `"BioVibe Peptides" <support@biovibepeptides.com>`,
+    replyTo: 'support@biovibepeptides.com',
     to: order.email,
     subject: `Invoice #${orderNumber} - BioVibe Peptides (Resent)`,
     html: `

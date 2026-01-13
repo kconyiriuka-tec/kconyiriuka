@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import dbConnect from "@/lib/db";
 import SiteContent from "@/models/SiteContent";
+import ContactForm from "@/components/ContactForm";
 
 // SVG Icons
 const Icons = {
@@ -174,19 +175,7 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100">
-              <form className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <input type="text" placeholder="First Name" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-white" />
-                  <input type="text" placeholder="Last Name" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-white" />
-                </div>
-                <input type="email" placeholder="Email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-white" />
-                <textarea placeholder="How can we help you?" rows={4} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-white"></textarea>
-                <button className="w-full py-3 bg-secondary text-white rounded-xl font-medium hover:bg-secondary/90 transition-colors shadow-lg">
-                  Send Message
-                </button>
-              </form>
-            </div>
+            <ContactForm />
           </div>
 
           <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
