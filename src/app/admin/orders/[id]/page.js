@@ -187,26 +187,19 @@ export default function OrderMemoPage() {
           <div className="flex justify-between items-start mb-6">
             <div>
               {/* Logo */}
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-10 h-10 bg-orange-400 rounded flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
-                  </svg>
-                </div>
-                <span className="text-blue-600 font-bold text-lg">BioVibe</span>
+              <div className="mb-2">
+                <span className="font-serif text-2xl font-bold text-secondary">
+                  BioVibe<span className="text-primary">.</span>
+                </span>
               </div>
               <div className="text-gray-600 text-sm">
-                <p className="font-bold text-blue-600">BioVibe Peptides</p>
-                <p>[Street Address]</p>
-                <p>[City, ST ZIP]</p>
-                <p>Phone: (000) 000-0000</p>
-                <p>Fax: (000) 000-0000</p>
-                <p>Website: biovibepeptides.com</p>
+                <p className="font-bold text-teal-600">BioVibe Peptides</p>
+                <p>support@biovibepeptides.com</p>
+                <p>biovibepeptides.com</p>
               </div>
             </div>
             <div className="text-right">
-              <h1 className="text-3xl font-bold text-blue-600 italic mb-2">PURCHASE ORDER</h1>
+              <h1 className="text-3xl font-bold text-teal-600 italic mb-2">PURCHASE ORDER</h1>
               <table className="text-sm ml-auto">
                 <tbody>
                   <tr>
@@ -215,7 +208,7 @@ export default function OrderMemoPage() {
                   </tr>
                   <tr>
                     <td className="text-gray-600 pr-4">PO #</td>
-                    <td className="font-medium">({orderNumber})</td>
+                    <td className="font-medium">{orderNumber}</td>
                   </tr>
                 </tbody>
               </table>
@@ -225,46 +218,50 @@ export default function OrderMemoPage() {
           {/* Vendor & Ship To */}
           <div className="grid grid-cols-2 gap-8 mb-6">
             <div>
-              <div className="bg-blue-600 text-white px-3 py-1 font-bold text-sm mb-2">VENDOR</div>
-              <div className="text-sm text-gray-600 border-l-2 border-blue-200 pl-3">
-                <p>[Company Name]</p>
-                <p>[Contact or Department]</p>
-                <p>[Street Address]</p>
-                <p>[City, ST ZIP]</p>
-                <p>Phone: (000) 000-0000</p>
-                <p>Fax: (000) 000-0000</p>
+              <div className="bg-teal-600 text-white px-3 py-1 font-bold text-sm mb-2">VENDOR</div>
+              <div className="text-sm text-gray-600 border-l-2 border-teal-200 pl-3">
+                <p className="font-medium">BioVibe Peptides</p>
+                <p>support@biovibepeptides.com</p>
+                <p>biovibepeptides.com</p>
               </div>
             </div>
             <div>
-              <div className="bg-blue-600 text-white px-3 py-1 font-bold text-sm mb-2">SHIP TO</div>
-              <div className="text-sm text-gray-600 border-l-2 border-blue-200 pl-3">
-                <p className="font-medium">{order.email}</p>
-                <p>[Company Name]</p>
-                <p>[Street Address]</p>
-                <p>[City, ST ZIP]</p>
-                <p>[Phone]</p>
+              <div className="bg-teal-600 text-white px-3 py-1 font-bold text-sm mb-2">SHIP TO</div>
+              <div className="text-sm text-gray-600 border-l-2 border-teal-200 pl-3">
+                <p className="font-medium">{order.title ? order.title + ' ' : ''}{order.firstName} {order.lastName}</p>
+                <p>{order.email}</p>
+                {order.phone && <p>{order.phone}</p>}
+                {order.shippingAddress && (
+                  <>
+                    {order.shippingAddress.street && <p>{order.shippingAddress.street}</p>}
+                    {order.shippingAddress.street2 && <p>{order.shippingAddress.street2}</p>}
+                    <p>
+                      {[order.shippingAddress.city, order.shippingAddress.state, order.shippingAddress.zip].filter(Boolean).join(', ')}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div>
 
           {/* Requisitioner Row */}
           <div className="grid grid-cols-4 gap-0 mb-4">
-            <div className="bg-blue-600 text-white px-3 py-2 font-bold text-xs">REQUISITIONER</div>
-            <div className="bg-blue-600 text-white px-3 py-2 font-bold text-xs">SHIP VIA</div>
-            <div className="bg-blue-600 text-white px-3 py-2 font-bold text-xs">F.O.B.</div>
-            <div className="bg-blue-600 text-white px-3 py-2 font-bold text-xs">SHIPPING TERMS</div>
+            <div className="bg-teal-600 text-white px-3 py-2 font-bold text-xs">REQUISITIONER</div>
+            <div className="bg-teal-600 text-white px-3 py-2 font-bold text-xs">SHIP VIA</div>
+            <div className="bg-teal-600 text-white px-3 py-2 font-bold text-xs">F.O.B.</div>
+            <div className="bg-teal-600 text-white px-3 py-2 font-bold text-xs">SHIPPING TERMS</div>
           </div>
           <div className="grid grid-cols-4 gap-0 mb-6 border border-gray-200">
-            <div className="px-3 py-2 text-sm border-r border-gray-200"></div>
-            <div className="px-3 py-2 text-sm border-r border-gray-200"></div>
-            <div className="px-3 py-2 text-sm border-r border-gray-200"></div>
+            <div className="px-3 py-2 text-sm border-r border-gray-200">{order.firstName} {order.lastName}</div>
+            <div className="px-3 py-2 text-sm border-r border-gray-200">{order.shippingOption || 'Standard'}</div>
+            <div className="px-3 py-2 text-sm border-r border-gray-200">Destination</div>
             <div className="px-3 py-2 text-sm"></div>
           </div>
 
           {/* Items Table */}
           <table className="w-full mb-6">
             <thead>
-              <tr className="bg-blue-600 text-white">
+              <tr className="bg-teal-600 text-white">
                 <th className="px-3 py-2 text-left text-xs font-bold">ITEM #</th>
                 <th className="px-3 py-2 text-left text-xs font-bold">DESCRIPTION</th>
                 <th className="px-3 py-2 text-center text-xs font-bold">QTY</th>
@@ -298,9 +295,9 @@ export default function OrderMemoPage() {
           {/* Comments & Totals */}
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <div className="bg-blue-600 text-white px-3 py-1 font-bold text-xs mb-2">Comments or Special Instructions</div>
+              <div className="bg-teal-600 text-white px-3 py-1 font-bold text-xs mb-2">Comments or Special Instructions</div>
               <div className="border border-gray-200 p-3 min-h-[80px] text-sm text-gray-500">
-                
+                {order.notes || ''}
               </div>
             </div>
             <div>
@@ -308,23 +305,19 @@ export default function OrderMemoPage() {
                 <tbody>
                   <tr className="border-b border-gray-200">
                     <td className="py-2 font-medium">SUBTOTAL</td>
-                    <td className="py-2 text-right">{order.total.toFixed(2)}</td>
+                    <td className="py-2 text-right">${order.subtotal?.toFixed(2) || order.total?.toFixed(2) || '0.00'}</td>
                   </tr>
                   <tr className="border-b border-gray-200">
-                    <td className="py-2 font-medium">TAX</td>
-                    <td className="py-2 text-right"></td>
+                    <td className="py-2 font-medium">PROCESSING FEE (5%)</td>
+                    <td className="py-2 text-right">${order.processingFee?.toFixed(2) || ((order.subtotal || 0) * 0.05).toFixed(2)}</td>
                   </tr>
                   <tr className="border-b border-gray-200">
                     <td className="py-2 font-medium">SHIPPING</td>
-                    <td className="py-2 text-right"></td>
-                  </tr>
-                  <tr className="border-b border-gray-200">
-                    <td className="py-2 font-medium">OTHER</td>
-                    <td className="py-2 text-right"></td>
+                    <td className="py-2 text-right">${order.shippingCost?.toFixed(2) || '0.00'}</td>
                   </tr>
                   <tr className="bg-gray-100">
                     <td className="py-2 font-bold">TOTAL</td>
-                    <td className="py-2 text-right font-bold text-blue-600">$ {order.total.toFixed(2)}</td>
+                    <td className="py-2 text-right font-bold text-teal-600">${order.total?.toFixed(2) || '0.00'}</td>
                   </tr>
                 </tbody>
               </table>
@@ -334,7 +327,7 @@ export default function OrderMemoPage() {
           {/* Footer */}
           <div className="mt-8 pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
             <p>If you have any questions about this purchase order, please contact</p>
-            <p>[Name, Phone #, E-mail]</p>
+            <p className="font-medium">support@biovibepeptides.com</p>
           </div>
         </div>
       </div>
