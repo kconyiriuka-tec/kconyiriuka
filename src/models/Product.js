@@ -11,6 +11,10 @@ const ProductSchema = new mongoose.Schema({
     required: [true, 'Please provide a subtitle (e.g. Lyophilized)'],
     maxlength: [60, 'Subtitle cannot be more than 60 characters'],
   },
+  category: {
+    type: String,
+    default: '',
+  },
   price: {
     type: Number,
     required: [true, 'Please provide a sale price.'],

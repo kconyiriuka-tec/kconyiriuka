@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import dbConnect from "@/lib/db";
+import SiteContent from "@/models/SiteContent";
 
 // SVG Icons
 const Icons = {
@@ -26,7 +28,17 @@ const Icons = {
   )
 };
 
-export default function Home() {
+const featureIcons = [Icons.Clarity, Icons.Compliance, Icons.Support, Icons.Transparency];
+
+async function getContent() {
+  await dbConnect();
+  const content = await SiteContent.getContent();
+  return JSON.parse(JSON.stringify(content));
+}
+
+export default async function Home() {
+  const content = await getContent();
+  
   return (
     <main className="min-h-screen bg-gradient-to-br from-white via-blue-50/30 to-teal-50/20 overflow-x-hidden">
       {/* Navigation */}
@@ -55,18 +67,16 @@ export default function Home() {
 
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-secondary tracking-tight leading-[1.1]">
-            Supporting Providers with Guidance on 
-            <span className="text-primary block mt-2">Peptide Solutions</span>
+            {content.heroTitle} 
+            <span className="text-primary block mt-2">{content.heroTitleHighlight}</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Trusted, research-backed insights for optimizing patient wellness. We help healthcare professionals navigate the peptide landscape with precision and confidence.
+            {content.heroSubtitle}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-            <Link href="/secure" className="px-8 py-4 bg-primary text-white rounded-full font-medium text-lg shadow-lg shadow-primary/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto">
-              Start a Consultation
-            </Link>
-          
-            {/* <Link href="/secure" className="px-8 py-4 bg-white text-secondary border border-gray-200 rounded-full font-medium text-lg hover:border-primary/50 hover:bg-gray-50 transition-all duration-300 w-full sm:w-auto">Order Products</Link> */}
+            <a href="#contact" className="px-8 py-4 bg-primary text-white rounded-full font-medium text-lg shadow-lg shadow-primary/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto text-center">
+              {content.heroCtaText}
+            </a>
           </div>
         </div>
 
@@ -76,10 +86,10 @@ export default function Home() {
           <div className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-white/40 backdrop-blur-xl border border-white/50 shadow-2xl flex items-center justify-center">
              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/90 z-10" />
              {/* Abstract medical/science visual representation */}
-             <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1707944746620-fc0371b91906?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center opacity-80 mix-blend-overlay"></div>
+             <div className="w-full h-full bg-[url('/img.jpeg')] bg-cover bg-center opacity-80 mix-blend-overlay"></div>
              <div className="absolute z-20 bottom-10 left-10 text-left">
-                <p className="text-sm font-bold tracking-wider text-primary uppercase mb-2">Advanced Peptide Science</p>
-                <h3 className="text-3xl font-serif font-bold text-secondary">Enhancing Patient Outcomes</h3>
+                <p className="text-sm font-bold tracking-wider text-primary uppercase mb-2">{content.heroImageCaption}</p>
+                <h3 className="text-3xl font-serif font-bold text-secondary">{content.heroImageSubCaption}</h3>
              </div>
           </div>
         </div>
@@ -89,25 +99,23 @@ export default function Home() {
       <section className="py-24 px-6 bg-white relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-left mb-16">
-            <h2 className="font-serif text-4xl font-bold text-secondary mb-4">Why Providers Partner With Us</h2>
+            <h2 className="font-serif text-4xl font-bold text-secondary mb-4">{content.featuresSectionTitle}</h2>
             <div className="w-20 h-1.5 bg-primary rounded-full"></div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { title: "Clarity", desc: "Navigating the peptide landscape with precision.", icon: Icons.Clarity },
-              { title: "Compliance", desc: "Guidance on regulatory standards.", icon: Icons.Compliance },
-              { title: "Provider Support", desc: "Direct expertise for healthcare professionals.", icon: Icons.Support },
-              { title: "Transparency", desc: "Honest information on peptide solutions.", icon: Icons.Transparency },
-            ].map((feature, i) => (
-              <div key={i} className="group p-8 rounded-2xl bg-gray-50 hover:bg-white border border-transparent hover:border-gray-100 hover:shadow-xl transition-all duration-300">
-                <div className="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
-                  <feature.icon />
+            {content.features?.map((feature, i) => {
+              const FeatureIcon = featureIcons[i] || featureIcons[0];
+              return (
+                <div key={i} className="group p-8 rounded-2xl bg-gray-50 hover:bg-white border border-transparent hover:border-gray-100 hover:shadow-xl transition-all duration-300">
+                  <div className="w-14 h-14 bg-white rounded-xl shadow-sm flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
+                    <FeatureIcon />
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-secondary mb-3">{feature.title}</h3>
+                  <p className="text-gray-500 leading-relaxed text-sm">{feature.description}</p>
                 </div>
-                <h3 className="font-serif text-xl font-bold text-secondary mb-3">{feature.title}</h3>
-                <p className="text-gray-500 leading-relaxed text-sm">{feature.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -120,36 +128,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
             <div className="max-w-2xl">
-              <span className="text-primary font-bold tracking-wider uppercase text-sm mb-4 block">Our Expertise</span>
-              <h2 className="font-serif text-4xl md:text-5xl font-bold leading-tight">Areas of Consultation</h2>
+              <span className="text-primary font-bold tracking-wider uppercase text-sm mb-4 block">{content.servicesSectionLabel}</span>
+              <h2 className="font-serif text-4xl md:text-5xl font-bold leading-tight">{content.servicesSectionTitle}</h2>
             </div>
-            {/* <button className="px-6 py-3 border border-white/20 hover:bg-white/10 rounded-full text-white transition-colors duration-300">
-              View All Solutions
-            </button> */}
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { 
-                title: "Peptide Blends", 
-                desc: "Custom combinations tailored for specific therapeutic goals.",
-                tags: ["Custom", "Specific"]
-              },
-              { 
-                title: "Capsules & Formats", 
-                desc: "Alternative delivery systems beyond traditional injectables.",
-                tags: ["Oral", "Topical"]
-              },
-              { 
-                title: "Advanced Compounds", 
-                desc: "Specialized solutions for complex patient needs.",
-                tags: ["Research", "Clinical"]
-              }
-            ].map((service, i) => (
+            {content.services?.map((service, i) => (
               <div key={i} className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-primary/50 hover:bg-white/10 transition-all duration-300 group cursor-pointer backdrop-blur-sm">
                 <div className="flex justify-between items-start mb-8">
                   <div className="flex gap-2">
-                    {service.tags.map((tag, idx) => (
+                    {service.tags?.map((tag, idx) => (
                       <span key={idx} className="text-xs font-medium px-2.5 py-1 rounded-full bg-white/10 text-primary">{tag}</span>
                     ))}
                   </div>
@@ -158,7 +147,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <h3 className="font-serif text-2xl font-bold mb-3 group-hover:text-primary transition-colors">{service.title}</h3>
-                <p className="text-gray-400 leading-relaxed">{service.desc}</p>
+                <p className="text-gray-400 leading-relaxed">{service.description}</p>
               </div>
             ))}
           </div>
@@ -166,12 +155,12 @@ export default function Home() {
       </section>
 
       {/* Footer / Contact */}
-      <footer className="bg-white pt-24 pb-12 px-6 border-t border-gray-100">
+      <footer id="contact" className="bg-white pt-24 pb-12 px-6 border-t border-gray-100">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 mb-20">
             <div>
-              <h2 className="font-serif text-4xl font-bold text-secondary mb-6">Ready to optimize your practice?</h2>
-              <p className="text-gray-600 mb-8 max-w-md">Connect with our team to learn how BioVibe Peptides can support your patient outcomes.</p>
+              <h2 className="font-serif text-4xl font-bold text-secondary mb-6">{content.contactTitle}</h2>
+              <p className="text-gray-600 mb-8 max-w-md">{content.contactSubtitle}</p>
               
               <div className="space-y-4">
                 <div className="flex items-center gap-4 text-gray-600">
@@ -180,7 +169,7 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                     </svg>
                   </div>
-                  <span>support@biovibepeptides.com</span>
+                  <span>{content.contactEmail}</span>
                 </div>
               </div>
             </div>
@@ -201,11 +190,7 @@ export default function Home() {
           </div>
 
           <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-            <p>&copy; 2024 BioVibe Peptides. All rights reserved.</p>
-            <div className="flex gap-6">
-              <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>
-            </div>
+            <p>{content.copyrightText}</p>
           </div>
         </div>
       </footer>

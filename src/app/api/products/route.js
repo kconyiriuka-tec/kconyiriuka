@@ -6,7 +6,7 @@ export async function GET() {
   await dbConnect();
 
   try {
-    const products = await Product.find({}).sort({ createdAt: -1 });
+    const products = await Product.find({}).sort({ order: 1, createdAt: -1 });
     return Response.json({ success: true, data: products });
   } catch (error) {
     return Response.json({ success: false, error: error.message }, { status: 400 });

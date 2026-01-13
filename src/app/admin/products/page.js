@@ -4,12 +4,16 @@ import { useState, useEffect } from "react";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [newCategory, setNewCategory] = useState("");
+  const [showCategoryInput, setShowCategoryInput] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     sub: "Lyophilized",
+    category: "",
     price: "",
     costPrice: "",
     stockQuantity: "",
@@ -18,6 +22,7 @@ export default function ProductsPage() {
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const fetchProducts = async () => {
@@ -32,6 +37,40 @@ export default function ProductsPage() {
       console.error("Failed to fetch products", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/categories");
+      const data = await res.json();
+      if (data.success) {
+        setCategories(data.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch categories", error);
+    }
+  };
+
+  const handleAddCategory = async () => {
+    if (!newCategory.trim()) return;
+    try {
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newCategory.trim() }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCategories([...categories, data.data]);
+        setFormData({ ...formData, category: data.data.name });
+        setNewCategory("");
+        setShowCategoryInput(false);
+      } else {
+        alert("Error: " + data.error);
+      }
+    } catch (error) {
+      alert("Failed to add category");
     }
   };
 
@@ -50,6 +89,7 @@ export default function ProductsPage() {
         body: JSON.stringify({
           name: formData.name,
           sub: formData.sub,
+          category: formData.category,
           price: parseFloat(formData.price),
           costPrice: parseFloat(formData.costPrice) || 0,
           stockQuantity: parseInt(formData.stockQuantity) || 0,
@@ -73,6 +113,7 @@ export default function ProductsPage() {
     setFormData({
       name: product.name,
       sub: product.sub,
+      category: product.category || "Peptides",
       price: product.price.toString(),
       costPrice: (product.costPrice || 0).toString(),
       stockQuantity: (product.stockQuantity || 0).toString(),
@@ -95,10 +136,76 @@ export default function ProductsPage() {
     }
   };
 
+  const handleMoveUp = async (index) => {
+    if (index === 0) return;
+    
+    // Optimistic update - swap in local state immediately
+    const newProducts = [...products];
+    [newProducts[index - 1], newProducts[index]] = [newProducts[index], newProducts[index - 1]];
+    setProducts(newProducts);
+    
+    const productToMove = products[index];
+    const productAbove = products[index - 1];
+    
+    try {
+      // Update orders in database
+      await Promise.all([
+        fetch(`/api/products/${productToMove._id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order: index - 1 }),
+        }),
+        fetch(`/api/products/${productAbove._id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order: index }),
+        }),
+      ]);
+    } catch (error) {
+      // Revert on error
+      setProducts(products);
+      alert("Failed to reorder product");
+    }
+  };
+
+  const handleMoveDown = async (index) => {
+    if (index === products.length - 1) return;
+    
+    // Optimistic update - swap in local state immediately
+    const newProducts = [...products];
+    [newProducts[index], newProducts[index + 1]] = [newProducts[index + 1], newProducts[index]];
+    setProducts(newProducts);
+    
+    const productToMove = products[index];
+    const productBelow = products[index + 1];
+    
+    try {
+      // Update orders in database
+      await Promise.all([
+        fetch(`/api/products/${productToMove._id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order: index + 1 }),
+        }),
+        fetch(`/api/products/${productBelow._id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order: index }),
+        }),
+      ]);
+    } catch (error) {
+      // Revert on error
+      setProducts(products);
+      alert("Failed to reorder product");
+    }
+  };
+
   const resetForm = () => {
     setShowForm(false);
     setEditingProduct(null);
-    setFormData({ name: "", sub: "Lyophilized", price: "", costPrice: "", stockQuantity: "", lowStockThreshold: "5" });
+    setFormData({ name: "", sub: "Lyophilized", category: "", price: "", costPrice: "", stockQuantity: "", lowStockThreshold: "5" });
+    setShowCategoryInput(false);
+    setNewCategory("");
   };
 
   return (
@@ -111,7 +218,7 @@ export default function ProductsPage() {
         <button
           onClick={() => { 
             setEditingProduct(null); 
-            setFormData({ name: "", sub: "Lyophilized", price: "", costPrice: "", stockQuantity: "", lowStockThreshold: "5" });
+            setFormData({ name: "", sub: "Lyophilized", category: "", price: "", costPrice: "", stockQuantity: "", lowStockThreshold: "5" });
             setShowForm(true); 
           }}
           className="px-6 py-2.5 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
@@ -164,6 +271,55 @@ export default function ProductsPage() {
                   required
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                {showCategoryInput ? (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="New category name"
+                      value={newCategory}
+                      onChange={(e) => setNewCategory(e.target.value)}
+                      className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddCategory}
+                      className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary/90"
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setShowCategoryInput(false); setNewCategory(""); }}
+                      className="px-4 py-2 bg-gray-200 text-gray-600 rounded-xl hover:bg-gray-300"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <select
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+                    >
+                      <option value="">Select category...</option>
+                      {categories.map((cat) => (
+                        <option key={cat._id} value={cat.name}>{cat.name}</option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => setShowCategoryInput(true)}
+                      className="px-4 py-3 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200 text-sm font-medium"
+                    >
+                      + New
+                    </button>
+                  </div>
+                )}
               </div>
               
               <div>
@@ -246,6 +402,7 @@ export default function ProductsPage() {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
+                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-20">Order</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Cost</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Price</th>
@@ -253,11 +410,43 @@ export default function ProductsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {products.map((product) => (
+                {products.map((product, index) => (
                   <tr key={product._id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-4">
+                      <div className="flex flex-col items-center gap-1">
+                        <button
+                          onClick={() => handleMoveUp(index)}
+                          disabled={index === 0}
+                          className="p-1 text-gray-400 hover:text-primary hover:bg-primary/10 rounded disabled:opacity-30 disabled:cursor-not-allowed"
+                          title="Move up"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                          </svg>
+                        </button>
+                        <span className="text-xs text-gray-400 font-medium">{index + 1}</span>
+                        <button
+                          onClick={() => handleMoveDown(index)}
+                          disabled={index === products.length - 1}
+                          className="p-1 text-gray-400 hover:text-primary hover:bg-primary/10 rounded disabled:opacity-30 disabled:cursor-not-allowed"
+                          title="Move down"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
                     <td className="px-6 py-4">
                       <div className="font-medium text-secondary">{product.name}</div>
-                      <div className="text-xs text-gray-400 uppercase">{product.sub}</div>
+                      <div className="text-xs text-gray-400">
+                        <span className="uppercase">{product.sub}</span>
+                        {product.category && (
+                          <span className="ml-2 px-2 py-0.5 bg-primary/10 text-primary rounded-full text-[10px] font-medium">
+                            {product.category}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-right font-mono text-gray-500">
                       ${(product.costPrice || 0).toFixed(2)}
