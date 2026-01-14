@@ -94,6 +94,27 @@ const SiteContentSchema = new mongoose.Schema({
     type: String,
     default: '© 2024 BioVibe Peptides. All rights reserved.',
   },
+  // Secure Order Page
+  securePageTitle: {
+    type: String,
+    default: 'BioVibe Private Secure Order Form',
+  },
+  securePageDescription: {
+    type: String,
+    default: 'Please fill the correct quantities of items you need and submit your order. Once your form has been submitted, you will receive an email with a copy of the order and our team will reach out to collect payment.',
+  },
+  securePageContactText: {
+    type: String,
+    default: 'If you have any questions, contact us at',
+  },
+  securePageDisclaimer: {
+    type: String,
+    default: '⚠️ Disclaimer: Peptides are NOT FDA approved. It should be used under the guidance of a medical provider.',
+  },
+  securePageFeeText: {
+    type: String,
+    default: 'A standard 5% processing fee is added to each order to ensure secure processing and fulfillment.',
+  },
 }, {
   timestamps: true,
 });

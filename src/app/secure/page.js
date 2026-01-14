@@ -11,6 +11,10 @@ export default function SecurePage() {
   const [quantities, setQuantities] = useState({});
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState(1); // 1 = products, 2 = checkout
+  const [processingFee, setProcessingFee] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [siteContent, setSiteContent] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [orderSuccess, setOrderSuccess] = useState(false);
@@ -31,32 +35,53 @@ export default function SecurePage() {
     notes: '',
   });
 
+  const fetchProducts = async () => {
+    try {
+      const prodRes = await fetch('/api/products', { cache: 'no-store' });
+      const prodData = await prodRes.json();
+      if (prodData.success) setProducts(prodData.data);
+    } catch (error) {
+      console.error("Failed to fetch products", error);
+    }
+  };
+
+  const fetchShippingMethods = async () => {
+    try {
+      const shipRes = await fetch('/api/shipping', { cache: 'no-store' });
+      const shipData = await shipRes.json();
+      if (shipData.success) {
+        const activeMethods = shipData.data.filter(m => m.isActive);
+        setShippingMethods(activeMethods);
+        // Set default shipping option
+        if (activeMethods.length > 0) {
+          setFormData(prev => ({ ...prev, shippingOption: activeMethods[0]._id }));
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch shipping methods", error);
+    }
+  };
+
+  const fetchSiteContent = async () => {
+    try {
+      const res = await fetch("/api/site-content", { cache: 'no-store' });
+      const data = await res.json();
+      if (data.success) {
+        setSiteContent(data.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch site content", error);
+    }
+  };
+
   useEffect(() => {
     async function fetchData() {
-      try {
-        const [prodRes, shipRes] = await Promise.all([
-          fetch('/api/products'),
-          fetch('/api/shipping')
-        ]);
-        
-        const prodData = await prodRes.json();
-        const shipData = await shipRes.json();
-
-        if (prodData.success) setProducts(prodData.data);
-        
-        if (shipData.success) {
-          const activeMethods = shipData.data.filter(m => m.isActive);
-          setShippingMethods(activeMethods);
-          // Set default shipping option
-          if (activeMethods.length > 0) {
-            setFormData(prev => ({ ...prev, shippingOption: activeMethods[0]._id }));
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-      } finally {
-        setLoading(false);
-      }
+      await Promise.all([
+        fetchProducts(),
+        fetchShippingMethods(),
+        fetchSiteContent()
+      ]);
+      setLoading(false);
     }
     fetchData();
   }, []);
@@ -83,14 +108,19 @@ export default function SecurePage() {
   // Find selected method details
   const selectedMethod = shippingMethods.find(m => m._id === formData.shippingOption);
   const shippingCost = selectedMethod ? selectedMethod.price : 0;
-  const processingFee = subtotal * 0.05; // 5% processing fee
-  
-  const total = subtotal + shippingCost + processingFee;
-  
+
+  useEffect(() => {
+    const fee = subtotal * 0.05;
+    setProcessingFee(fee);
+    setTotal(subtotal + shippingCost + fee);
+  }, [subtotal, shippingCost]);
+
   // Filter products by search query
-  const filteredProducts = products.filter(p => 
-    p.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    setFilteredProducts(products.filter(p => 
+      p.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ));
+  }, [products, searchQuery]);
 
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
@@ -207,20 +237,19 @@ export default function SecurePage() {
           <>
             {/* Header Section */}
             <div className="mb-8">
-              <h1 className="text-3xl font-serif font-bold mb-2">BioVibe Private Secure Order Form</h1>
+              <h1 className="text-3xl font-serif font-bold mb-2">{siteContent?.securePageTitle || "BioVibe Private Secure Order Form"}</h1>
               <p className="text-gray-600 mb-4">
-                Please fill the correct quantities of items you need and submit your order. Once your form has been submitted, 
-                you will receive an email with a copy of the order and our team will reach out to collect payment.
+                {siteContent?.securePageDescription || "Please fill the correct quantities of items you need and submit your order. Once your form has been submitted, you will receive an email with a copy of the order and our team will reach out to collect payment."}
               </p>
               <p className="text-gray-500 text-sm mb-2">
-                If you have any questions, contact us at <a href="mailto:support@biovibepeptides.com" className="text-primary hover:underline">support@biovibepeptides.com</a>.
+                {siteContent?.securePageContactText || "If you have any questions, contact us at"} <a href={`mailto:${siteContent?.contactEmail || "support@biovibepeptides.com"}`} className="text-primary hover:underline">{siteContent?.contactEmail || "support@biovibepeptides.com"}</a>.
               </p>
               <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mt-4">
                 <p className="text-yellow-800 text-sm font-medium">
-                  ⚠️ Disclaimer: Peptides are NOT FDA approved. It should be used under the guidance of a medical provider.
+                  {siteContent?.securePageDisclaimer || "⚠️ Disclaimer: Peptides are NOT FDA approved. It should be used under the guidance of a medical provider."}
                 </p>
                 <p className="text-yellow-700 text-sm mt-2">
-                  A standard 5% processing fee is added to each order to ensure secure processing and fulfillment.
+                  {siteContent?.securePageFeeText || "A standard 5% processing fee is added to each order to ensure secure processing and fulfillment."}
                 </p>
               </div>
             </div>

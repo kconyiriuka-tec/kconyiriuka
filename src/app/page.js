@@ -1,8 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import dbConnect from "@/lib/db";
 import SiteContent from "@/models/SiteContent";
 import ContactForm from "@/components/ContactForm";
+
+export const dynamic = 'force-dynamic';
 
 // SVG Icons
 const Icons = {

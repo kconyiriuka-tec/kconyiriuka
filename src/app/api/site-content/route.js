@@ -1,6 +1,8 @@
 import dbConnect from "@/lib/db";
 import SiteContent from "@/models/SiteContent";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   await dbConnect();
 

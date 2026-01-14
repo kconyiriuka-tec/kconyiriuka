@@ -253,6 +253,61 @@ export default function ContentPage() {
         </div>
       </div>
 
+      {/* Secure Order Page */}
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+        <h2 className="text-xl font-bold text-secondary border-b pb-3">Secure Order Page</h2>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Page Title</label>
+          <input
+            type="text"
+            value={content.securePageTitle}
+            onChange={(e) => setContent({ ...content, securePageTitle: e.target.value })}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+          <textarea
+            value={content.securePageDescription}
+            onChange={(e) => setContent({ ...content, securePageDescription: e.target.value })}
+            rows={3}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Contact Text</label>
+          <input
+            type="text"
+            value={content.securePageContactText}
+            onChange={(e) => setContent({ ...content, securePageContactText: e.target.value })}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Disclaimer Text</label>
+          <input
+            type="text"
+            value={content.securePageDisclaimer}
+            onChange={(e) => setContent({ ...content, securePageDisclaimer: e.target.value })}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Processing Fee Text</label>
+          <input
+            type="text"
+            value={content.securePageFeeText}
+            onChange={(e) => setContent({ ...content, securePageFeeText: e.target.value })}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+          />
+        </div>
+      </div>
+
       {/* Contact Section */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
         <h2 className="text-xl font-bold text-secondary border-b pb-3">Contact/Footer Section</h2>
