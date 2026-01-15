@@ -25,6 +25,11 @@ const OrderSchema = new mongoose.Schema({
   // Customer Info
   firstName: String,
   lastName: String,
+  title: String,
+  practiceName: {
+    type: String,
+    required: [true, 'Practice Name is required'],
+  },
   email: {
     type: String,
     required: [true, 'Customer email is required'],
@@ -56,6 +61,8 @@ const OrderSchema = new mongoose.Schema({
     enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'],
     default: 'pending',
   },
+  
+  paymentLink: String,
   
   // Additional
   notes: String,

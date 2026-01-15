@@ -103,10 +103,15 @@ function generateInvoicePDF(order, jsPDF) {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
   
-  const customerName = `${order.title ? order.title + ' ' : ''}${order.firstName} ${order.lastName}`;
-  doc.text(`Name: ${customerName}`, margin + 10, y);
+  // Column 1
+  doc.text(`Practice Name: ${order.practiceName || 'N/A'}`, margin + 10, y);
   y += 15;
-  doc.text(`Email: ${order.email}`, margin + 10, y);
+  const customerName = `${order.firstName} ${order.lastName}`;
+  doc.text(`Name: ${customerName}`, margin + 10, y);
+  
+  // Column 2 (Side by side)
+  doc.text(`Email: ${order.email}`, margin + 300, y);
+  
   y += 15;
   doc.text(`Phone: ${order.phone || 'Not provided'}`, margin + 10, y);
   
@@ -198,7 +203,7 @@ function generateInvoicePDF(order, jsPDF) {
   doc.setTextColor(146, 64, 14);
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text('⚠️ Disclaimer: Peptides are NOT FDA approved. They should be used under the', margin + 10, y + 15);
+  doc.text('Disclaimer: Peptides are NOT FDA approved. They should be used under the', margin + 10, y + 15);
   doc.text('guidance of a medical provider.', margin + 10, y + 28);
 
   y += 55;

@@ -22,7 +22,10 @@ export default function SecurePage() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
+    firstName: '',
+    lastName: '',
     title: '',
+    practiceName: '',
     email: '',
     emailConfirmation: '',
     phone: '',
@@ -34,6 +37,7 @@ export default function SecurePage() {
     shippingOption: '', // Will default to first available
     notes: '',
   });
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const fetchProducts = async () => {
     try {
@@ -130,6 +134,11 @@ export default function SecurePage() {
       alert('Email addresses do not match. Please confirm your email.');
       return;
     }
+
+    if (!agreedToTerms) {
+      alert('You must agree to the Terms and Conditions to place an order.');
+      return;
+    }
     
     setSubmitting(true);
 
@@ -144,6 +153,7 @@ export default function SecurePage() {
       firstName: formData.firstName,
       lastName: formData.lastName,
       title: formData.title,
+      practiceName: formData.practiceName,
       email: formData.email,
       phone: formData.phone,
       shippingAddress: {
@@ -300,7 +310,7 @@ export default function SecurePage() {
                         ) : null}
                       </div>
                     </div>
-                    <span className="text-lg font-bold text-primary ml-2">${product.price}</span>
+                    <span className="text-lg font-bold text-primary ml-2">${product.price?.toFixed(2)}</span>
                   </div>
                   <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
                     <button 
@@ -374,9 +384,14 @@ export default function SecurePage() {
                           className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
                       </div>
                       <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Practice Name *</label>
+                        <input type="text" required value={formData.practiceName} onChange={(e) => setFormData({...formData, practiceName: e.target.value})}
+                          className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Medical Provider/Director Name and Title *</label>
                         <input type="text" required value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})}
-                          placeholder="e.g., Dr., NP, PA, MD"
+                          placeholder="e.g., Dr. John Doe, MD"
                           className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary" />
                       </div>
                       <div>
@@ -473,6 +488,20 @@ export default function SecurePage() {
                     <textarea rows={3} value={formData.notes} onChange={(e) => setFormData({...formData, notes: e.target.value})}
                       placeholder="Any special instructions..."
                       className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none" />
+                  </div>
+
+                  {/* Terms & Conditions Checkbox */}
+                  <div className="flex items-start gap-3 p-2">
+                    <input
+                      type="checkbox"
+                      id="terms"
+                      checked={agreedToTerms}
+                      onChange={(e) => setAgreedToTerms(e.target.checked)}
+                      className="mt-1 w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary"
+                    />
+                    <label htmlFor="terms" className="text-sm text-gray-600">
+                      I agree to the <Link href="/terms" target="_blank" className="text-primary hover:underline">Terms and Conditions</Link> & <Link href="/privacy" target="_blank" className="text-primary hover:underline">Privacy Policy</Link>, and understand that these products are for research or professional use only.
+                    </label>
                   </div>
 
                   {/* Submit - Mobile */}

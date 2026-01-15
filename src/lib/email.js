@@ -1,7 +1,9 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: "smtp0001.neo.space",
+  port: 465,
+  secure: true, // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -50,8 +52,14 @@ export async function sendOrderConfirmation(order) {
             <h3 style="margin: 0 0 15px 0; color: #0B2E27; font-size: 16px;">Customer Information</h3>
             <table style="width: 100%; font-size: 14px;">
               <tr>
-                <td style="padding: 4px 0; color: #666;">Name:</td>
-                <td style="padding: 4px 0; color: #0B2E27; font-weight: 500;">${order.title ? order.title + ' ' : ''}${order.firstName} ${order.lastName}</td>
+                <td style="padding: 4px 0; color: #666; width: 50%;">
+                  Practice Name: <br>
+                  <span style="color: #0B2E27; font-weight: 500;">${order.practiceName || 'N/A'}</span>
+                </td>
+                <td style="padding: 4px 0; color: #666; width: 50%;">
+                  Medical Provider/Director: <br>
+                  <span style="color: #0B2E27; font-weight: 500;">${order.title ? order.title : ''} ${order.firstName} ${order.lastName}</span>
+                </td>
               </tr>
               <tr>
                 <td style="padding: 4px 0; color: #666;">Email:</td>
@@ -90,22 +98,25 @@ export async function sendOrderConfirmation(order) {
             <div style="border-top: 2px solid #e5e7eb; margin-top: 15px; padding-top: 15px;">
               <table style="width: 100%; font-size: 14px;">
                 <tr>
-                  <td style="padding: 4px 0; color: #666;">Subtotal:</td>
-                  <td style="padding: 4px 0; text-align: right;">$${order.subtotal.toFixed(2)}</td>
+                  <td style="padding: 4px 12px 4px 0; color: #666;">Subtotal:</td>
+                  <td style="padding: 4px 0; text-align: right; white-space: nowrap;">$${order.subtotal.toFixed(2)}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 4px 0; color: #666;">Processing Fee (5%):</td>
-                  <td style="padding: 4px 0; text-align: right;">$${processingFee.toFixed(2)}</td>
+                  <td style="padding: 4px 12px 4px 0; color: #666;">Processing Fee (5%):</td>
+                  <td style="padding: 4px 0; text-align: right; white-space: nowrap;">$${processingFee.toFixed(2)}</td>
                 </tr>
                 ${shippingCost > 0 ? `
                 <tr>
-                  <td style="padding: 4px 0; color: #666;">Shipping${order.shippingOption ? ' (' + order.shippingOption + ')' : ''}:</td>
-                  <td style="padding: 4px 0; text-align: right;">$${shippingCost.toFixed(2)}</td>
+                  <td style="padding: 4px 12px 4px 0; color: #666; vertical-align: top;">
+                    Shipping:
+                    ${order.shippingOption ? `<br><span style="font-size: 12px; color: #888; font-weight: normal;">${order.shippingOption}</span>` : ''}
+                  </td>
+                  <td style="padding: 4px 0; text-align: right; vertical-align: top; white-space: nowrap;">$${shippingCost.toFixed(2)}</td>
                 </tr>
                 ` : ''}
                 <tr style="font-size: 18px; font-weight: bold;">
-                  <td style="padding: 12px 0 0 0; color: #0B2E27;">Total:</td>
-                  <td style="padding: 12px 0 0 0; text-align: right; color: #41DAC1;">$${order.total.toFixed(2)}</td>
+                  <td style="padding: 12px 12px 0 0; color: #0B2E27;">Total:</td>
+                  <td style="padding: 12px 0 0 0; text-align: right; color: #41DAC1; white-space: nowrap;">$${order.total.toFixed(2)}</td>
                 </tr>
               </table>
             </div>
@@ -181,6 +192,84 @@ export async function sendInvoiceWithPDF(order, pdfBuffer) {
         contentType: 'application/pdf'
       }
     ]
+  };
+
+  return transporter.sendMail(mailOptions);
+}
+
+export async function sendAdminOrderAlert(order) {
+  const itemsHtml = order.items.map(item => 
+    `<li>${item.quantity}x ${item.name} ($${item.price.toFixed(2)})</li>`
+  ).join('');
+
+  const mailOptions = {
+    from: `"BioVibe Peptides System" <support@biovibepeptides.com>`,
+    to: 'support@biovibepeptides.com',
+    subject: `🚨 New Order Alert! #${order._id.toString().slice(-8).toUpperCase()} - $${order.total.toFixed(2)}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; padding: 20px;">
+        <h2 style="color: #0B2E27;">New Order Received</h2>
+        <p><strong>Order ID:</strong> #${order._id.toString().slice(-8).toUpperCase()}</p>
+        <p><strong>Customer:</strong> ${order.firstName} ${order.lastName}</p>
+        <p><strong>Practice:</strong> ${order.practiceName || 'N/A'}</p>
+        <p><strong>Total:</strong> $${order.total.toFixed(2)}</p>
+        
+        <h3>Items:</h3>
+        <ul>${itemsHtml}</ul>
+        
+        <p><a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://www.biovibepeptides.com'}/admin/orders" style="display: inline-block; background: #0B2E27; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View Order in Admin</a></p>
+      </div>
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Admin alert sent');
+  } catch (error) {
+    console.error('Failed to send admin alert:', error);
+  }
+}
+
+export async function sendPaymentLinkEmail(order, paymentLink) {
+  const mailOptions = {
+    from: `"BioVibe Peptides" <support@biovibepeptides.com>`,
+    to: order.email,
+    replyTo: 'support@biovibepeptides.com',
+    subject: `Payment Link for Your Order`,
+    html: `
+      <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto;">
+        <p>Dear ${order.firstName} ${order.lastName},</p>
+        
+        <p>Thank you for choosing BioVibe Peptides. Please use the payment link below to complete the payment for your order:</p>
+        
+        <p style="margin: 20px 0;">
+          <a href="${paymentLink}" style="background-color: #0B2E27; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Pay Now</a>
+        </p>
+        
+        <p>Or copy and paste this link into your browser:<br>
+        <a href="${paymentLink}">${paymentLink}</a></p>
+        
+        <p>If you encounter any issues, or if you need an alternative payment method, feel free to reply to this email and we’ll assist you promptly. Once payment is received, we’ll update you with a confirmation and your order timeline.</p>
+        
+        <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0;">
+          <strong>Tips:</strong>
+          <ul style="margin: 5px 0 0 0; padding-left: 20px;">
+            <li>The link is secure and easy to use.</li>
+            <li>You can review the order details before paying.</li>
+          </ul>
+        </div>
+        
+        <p>Thank you for your business!</p>
+        
+        <p>Best regards,<br>
+        <strong>BioVibe Peptides</strong><br>
+        <a href="https://www.biovibepeptides.com">www.biovibepeptides.com</a></p>
+        
+        <div style="font-family: serif; font-size: 24px; font-weight: bold; color: #0B2E27; margin-top: 20px;">
+          BioVibe<span style="color: #41DAC1;">.</span>
+        </div>
+      </div>
+    `
   };
 
   return transporter.sendMail(mailOptions);

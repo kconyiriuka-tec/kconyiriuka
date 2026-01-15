@@ -62,7 +62,7 @@ export default async function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6">
+      <section className="relative pt-32 pb-10 lg:pt-48 lg:pb-20 px-6">
         {/* Abstract Background Shapes */}
         <div className="absolute top-20 right-0 w-[800px] h-[800px] bg-teal-100/30 rounded-full blur-3xl -z-10 animate-pulse" />
         <div className="absolute top-40 left-[-200px] w-[600px] h-[600px] bg-blue-100/20 rounded-full blur-3xl -z-10" />
@@ -85,10 +85,10 @@ export default async function Home() {
         {/* Hero Visual/Glass Card */}
         <div className="mt-20 max-w-6xl mx-auto relative group">
           <div className="absolute -inset-1 bg-gradient-to-r from-teal-400 to-blue-400 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
-          <div className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-white/40 backdrop-blur-xl border border-white/50 shadow-2xl flex items-center justify-center">
-             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/90 z-10" />
+          <div className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-white/10 backdrop-blur-xl border border-white/50 shadow-2xl flex items-center justify-center">
+             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/40 z-10" />
              {/* Abstract medical/science visual representation */}
-             <div className="w-full h-full bg-[url('/img.jpeg')] bg-cover bg-center opacity-80 mix-blend-overlay"></div>
+             <div className="w-full h-full bg-[url('/img.jpeg')] bg-cover bg-center"></div>
              <div className="absolute z-20 bottom-10 left-10 text-left">
                 <p className="text-sm font-bold tracking-wider text-primary uppercase mb-2">{content.heroImageCaption}</p>
                 <h3 className="text-3xl font-serif font-bold text-secondary">{content.heroImageSubCaption}</h3>
@@ -98,7 +98,7 @@ export default async function Home() {
       </section>
 
       {/* Why Choose Us / Features */}
-      <section className="py-24 px-6 bg-white relative">
+      <section className="pt-12 pb-24 px-6 bg-white relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-left mb-16">
             <h2 className="font-serif text-4xl font-bold text-secondary mb-4">{content.featuresSectionTitle}</h2>
@@ -157,7 +157,7 @@ export default async function Home() {
       </section>
 
       {/* Footer / Contact */}
-      <footer id="contact" className="bg-white pt-24 pb-12 px-6 border-t border-gray-100">
+      <footer id="contact" className="bg-white pt-16 pb-4 px-6 border-t border-gray-100">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 mb-20">
             <div>

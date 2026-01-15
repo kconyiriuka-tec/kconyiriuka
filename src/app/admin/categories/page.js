@@ -96,8 +96,8 @@ export default function CategoriesPage() {
       </div>
 
       {/* Add Category Form */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <form onSubmit={handleAddCategory} className="flex gap-3">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 md:p-6">
+        <form onSubmit={handleAddCategory} className="flex flex-col sm:flex-row gap-3">
           <input
             type="text"
             placeholder="Enter new category name (e.g., GLP-1, Peptides)"
@@ -107,7 +107,7 @@ export default function CategoriesPage() {
           />
           <button
             type="submit"
-            className="px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-colors flex items-center gap-2"
+            className="px-6 py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -128,7 +128,7 @@ export default function CategoriesPage() {
         ) : (
           <div className="divide-y divide-gray-100">
             {categories.map((category) => (
-              <div key={category._id} className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors">
+              <div key={category._id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 px-4 md:px-6 py-4 hover:bg-gray-50 transition-colors">
                 {editingId === category._id ? (
                   <div className="flex-1 flex gap-3">
                     <input

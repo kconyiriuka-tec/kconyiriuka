@@ -64,15 +64,15 @@ export default function InventoryPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div className="bg-white p-4 md:p-6 rounded-2xl border border-gray-100 shadow-sm">
           <p className="text-xs text-gray-500 uppercase font-medium">In Stock</p>
           <p className="text-3xl font-bold text-green-600 mt-1">{products.length - lowStockProducts.length}</p>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div className="bg-white p-4 md:p-6 rounded-2xl border border-gray-100 shadow-sm">
           <p className="text-xs text-gray-500 uppercase font-medium">Low Stock</p>
           <p className="text-3xl font-bold text-yellow-600 mt-1">{lowStockProducts.length - outOfStockProducts.length}</p>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div className="bg-white p-4 md:p-6 rounded-2xl border border-gray-100 shadow-sm">
           <p className="text-xs text-gray-500 uppercase font-medium">Out of Stock</p>
           <p className="text-3xl font-bold text-red-600 mt-1">{outOfStockProducts.length}</p>
         </div>
@@ -108,24 +108,24 @@ export default function InventoryPage() {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Current Stock</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Alert Limit</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
+                  <th className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                  <th className="px-3 md:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Current Stock</th>
+                  <th className="px-3 md:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Alert Limit</th>
+                  <th className="px-3 md:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {products.map((product) => (
                   <tr key={product._id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-secondary">{product.name}</div>
-                      <div className="text-xs text-gray-400 uppercase">{product.sub}</div>
+                    <td className="px-3 md:px-6 py-3 md:py-4">
+                      <div className="font-medium text-secondary text-sm md:text-base">{product.name}</div>
+                      <div className="text-[10px] md:text-xs text-gray-400 uppercase">{product.sub}</div>
                     </td>
-                    <td className="px-6 py-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-center">
+                      <div className="flex items-center justify-center gap-1 md:gap-2">
                         <button 
                           onClick={() => updateStock(product._id, Math.max(0, (product.stockQuantity || 0) - 1))}
-                          className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-500"
+                          className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-500"
                         >
                           -
                         </button>
@@ -134,21 +134,23 @@ export default function InventoryPage() {
                           min="0"
                           value={product.stockQuantity || 0}
                           onChange={(e) => updateStock(product._id, e.target.value)}
-                          className="w-20 px-2 py-1 text-center font-mono font-bold border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"
+                          className="w-16 md:w-20 px-1 md:px-2 py-1 text-center font-mono font-bold border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm md:text-base"
                         />
                         <button 
                           onClick={() => updateStock(product._id, (product.stockQuantity || 0) + 1)}
-                          className="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-500"
+                          className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-500"
                         >
                           +
                         </button>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-center text-gray-500">
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-center text-gray-500 text-sm md:text-base">
                       {product.lowStockThreshold || 5}
                     </td>
-                    <td className="px-6 py-4 text-center">
-                      {getStockBadge(product)}
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-center">
+                      <div className="scale-90 md:scale-100 origin-center">
+                        {getStockBadge(product)}
+                      </div>
                     </td>
                   </tr>
                 ))}

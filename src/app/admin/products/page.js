@@ -402,17 +402,17 @@ export default function ProductsPage() {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-20">Order</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Cost</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Price</th>
-                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  <th className="px-3 md:px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-16 md:w-20">Order</th>
+                  <th className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                  <th className="px-3 md:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Cost</th>
+                  <th className="px-3 md:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Price</th>
+                  <th className="px-3 md:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {products.map((product, index) => (
                   <tr key={product._id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-4">
+                    <td className="px-3 md:px-4 py-3 md:py-4">
                       <div className="flex flex-col items-center gap-1">
                         <button
                           onClick={() => handleMoveUp(index)}
@@ -437,24 +437,24 @@ export default function ProductsPage() {
                         </button>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-secondary">{product.name}</div>
-                      <div className="text-xs text-gray-400">
+                    <td className="px-3 md:px-6 py-3 md:py-4">
+                      <div className="font-medium text-secondary text-sm md:text-base">{product.name}</div>
+                      <div className="text-[10px] md:text-xs text-gray-400">
                         <span className="uppercase">{product.sub}</span>
                         {product.category && (
-                          <span className="ml-2 px-2 py-0.5 bg-primary/10 text-primary rounded-full text-[10px] font-medium">
+                          <span className="ml-1 md:ml-2 px-1.5 md:px-2 py-0.5 bg-primary/10 text-primary rounded-full text-[9px] md:text-[10px] font-medium">
                             {product.category}
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-right font-mono text-gray-500">
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-right font-mono text-gray-500 text-sm md:text-base">
                       ${(product.costPrice || 0).toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-right font-mono font-bold text-secondary">
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-right font-mono font-bold text-secondary text-sm md:text-base">
                       ${product.price.toFixed(2)}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-3 md:py-4">
                       <div className="flex items-center justify-center gap-1">
                         <button onClick={() => handleEdit(product)} className="p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors" title="Edit">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">

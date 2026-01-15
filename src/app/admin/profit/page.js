@@ -141,10 +141,10 @@ export default function ProfitPage() {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Cost</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Price</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Margin/Unit</th>
+                <th className="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                <th className="px-3 md:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Cost</th>
+                <th className="px-3 md:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Price</th>
+                <th className="px-3 md:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Margin/Unit</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -154,19 +154,19 @@ export default function ProfitPage() {
                 
                 return (
                   <tr key={product._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-secondary">{product.name}</div>
-                      <div className="text-xs text-gray-400 uppercase">{product.sub}</div>
+                    <td className="px-3 md:px-6 py-3 md:py-4">
+                      <div className="font-medium text-secondary text-sm md:text-base">{product.name}</div>
+                      <div className="text-[10px] md:text-xs text-gray-400 uppercase">{product.sub}</div>
                     </td>
-                    <td className="px-6 py-4 text-right font-mono text-gray-500">
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-right font-mono text-gray-500 text-sm md:text-base">
                       ${(product.costPrice || 0).toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-right font-mono text-secondary">
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-right font-mono text-secondary text-sm md:text-base">
                       ${product.price.toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <span className="font-bold text-green-600">+${margin.toFixed(2)}</span>
-                      <span className="text-xs text-gray-400 ml-2">({marginPercent}%)</span>
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-right">
+                      <span className="font-bold text-green-600 text-sm md:text-base">+${margin.toFixed(2)}</span>
+                      <span className="text-[10px] md:text-xs text-gray-400 ml-1 md:ml-2 block md:inline">({marginPercent}%)</span>
                     </td>
                   </tr>
                 );

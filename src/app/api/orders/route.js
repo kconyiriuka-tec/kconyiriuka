@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/db";
 import Order from "@/models/Order";
 import Product from "@/models/Product";
-import { sendOrderConfirmation } from "@/lib/email";
+import { sendOrderConfirmation, sendAdminOrderAlert } from "@/lib/email";
 
 import ShippingMethod from "@/models/ShippingMethod";
 
@@ -46,9 +46,11 @@ export async function POST(request) {
       }
     }
     
-    // Send confirmation email
+    // Send confirmation email and admin alert
     try {
       await sendOrderConfirmation(order);
+      // Send admin alert asynchronously (don't await to avoid blocking response if it fails)
+      sendAdminOrderAlert(order).catch(err => console.error("Admin alert failed:", err));
     } catch (emailError) {
       console.error("Failed to send email:", emailError);
       // Don't fail the order if email fails

@@ -78,8 +78,8 @@ export default function AdminDashboard() {
       )}
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <div className="bg-white p-3 md:p-5 rounded-2xl border border-gray-100 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -87,13 +87,15 @@ export default function AdminDashboard() {
               </svg>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase">Products</p>
-              <p className="text-2xl font-bold text-secondary">{products.length}</p>
+              <p className="text-[10px] md:text-xs text-gray-500 uppercase">Products</p>
+              <p className="text-lg md:text-2xl font-bold text-secondary">{products.length}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+
+
+        <div className="bg-white p-3 md:p-5 rounded-2xl border border-gray-100 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center text-green-500">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -101,13 +103,13 @@ export default function AdminDashboard() {
               </svg>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase">Orders</p>
-              <p className="text-2xl font-bold text-secondary">{orders.length}</p>
+              <p className="text-[10px] md:text-xs text-gray-500 uppercase">Orders</p>
+              <p className="text-lg md:text-2xl font-bold text-secondary">{orders.length}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+        <div className="bg-white p-3 md:p-5 rounded-2xl border border-gray-100 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center text-primary">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -115,13 +117,13 @@ export default function AdminDashboard() {
               </svg>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase">Revenue</p>
-              <p className="text-2xl font-bold text-secondary">${totalRevenue.toFixed(2)}</p>
+              <p className="text-[10px] md:text-xs text-gray-500 uppercase">Revenue</p>
+              <p className="text-lg md:text-2xl font-bold text-secondary truncate">${totalRevenue.toFixed(2)}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
+        <div className="bg-white p-3 md:p-5 rounded-2xl border border-gray-100 shadow-sm">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${totalProfit >= 0 ? 'bg-green-50 text-green-500' : 'bg-red-50 text-red-500'}`}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -129,8 +131,8 @@ export default function AdminDashboard() {
               </svg>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase">Profit</p>
-              <p className={`text-2xl font-bold ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <p className="text-[10px] md:text-xs text-gray-500 uppercase">Profit</p>
+              <p className={`text-lg md:text-2xl font-bold truncate ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {totalProfit >= 0 ? '+' : '-'}${Math.abs(totalProfit).toFixed(2)}
               </p>
             </div>

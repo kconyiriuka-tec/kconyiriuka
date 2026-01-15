@@ -46,6 +46,8 @@ export default function OrderMemoPage() {
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
   const [resending, setResending] = useState(false);
+  const [sendingLink, setSendingLink] = useState(false);
+  const [paymentLink, setPaymentLink] = useState("");
   const [toast, setToast] = useState(null);
   const memoRef = useRef(null);
 
@@ -58,8 +60,10 @@ export default function OrderMemoPage() {
       try {
         const res = await fetch(`/api/orders/${params.id}`);
         const data = await res.json();
+
         if (data.success) {
           setOrder(data.data);
+          setPaymentLink(data.data.paymentLink || "");
         }
       } catch (error) {
         console.error("Failed to fetch order", error);
@@ -127,6 +131,36 @@ export default function OrderMemoPage() {
     } finally {
       setResending(false);
     }
+
+  };
+
+
+
+  const handleSendPaymentLink = async () => {
+    if (!order || sendingLink) return;
+    if (!paymentLink) {
+      showToast('Please enter a payment link', 'error');
+      return;
+    }
+    
+    setSendingLink(true);
+    try {
+      const res = await fetch(`/api/orders/${order._id}/send-payment-link`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentLink }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`Payment link email sent to ${order.email}`, 'success');
+      } else {
+        showToast('Failed to send email: ' + data.error, 'error');
+      }
+    } catch (error) {
+      showToast('Error sending email', 'error');
+    } finally {
+      setSendingLink(false);
+    }
   };
 
   if (loading) {
@@ -180,8 +214,35 @@ export default function OrderMemoPage() {
           </div>
         </div>
 
+        {/* Payment Link Section */}
+        <div className="max-w-4xl mx-auto mb-6 bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+          <h3 className="text-lg font-bold text-gray-800 mb-4">Payment & Fulfillment</h3>
+          <div className="flex flex-col sm:flex-row gap-4 items-end">
+             <div className="flex-grow w-full">
+               <label className="block text-sm font-medium text-gray-700 mb-1">Payment Link</label>
+               <input 
+                 type="text" 
+                 value={paymentLink}
+                 onChange={(e) => setPaymentLink(e.target.value)}
+                 placeholder="https://stripe.com/payment-link/..."
+                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+               />
+             </div>
+             <div className="flex gap-2">
+               <button 
+                 onClick={handleSendPaymentLink}
+                 disabled={sendingLink || !paymentLink}
+                 className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+               >
+                 {sendingLink ? 'Sending...' : '📨 Send Payment Email'}
+               </button>
+             </div>
+          </div>
+        </div>
+
         {/* Purchase Order Document */}
-        <div ref={memoRef} className="purchase-order max-w-4xl mx-auto bg-white shadow-xl p-8" style={{ fontFamily: 'Arial, sans-serif' }}>
+        <div className="w-full overflow-x-auto pb-6">
+          <div ref={memoRef} className="purchase-order min-w-[800px] max-w-4xl mx-auto bg-white shadow-xl p-8" style={{ fontFamily: 'Arial, sans-serif' }}>
           
           {/* Header */}
           <div className="flex justify-between items-start mb-6">
@@ -329,6 +390,7 @@ export default function OrderMemoPage() {
             <p>If you have any questions about this purchase order, please contact</p>
             <p className="font-medium">support@biovibepeptides.com</p>
           </div>
+        </div>
         </div>
       </div>
     </>

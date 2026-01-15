@@ -131,39 +131,40 @@ export default function OrdersPage() {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Order</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
-                  <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase">Total</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                  <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
+
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-medium text-gray-500 uppercase">Order</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-medium text-gray-500 uppercase">Items</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-right text-xs font-medium text-gray-500 uppercase">Total</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-center text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {filteredOrders.map((order) => (
                   <tr key={order._id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4">
-                      <span className="font-mono text-sm text-gray-500">#{order._id.slice(-6).toUpperCase()}</span>
+                    <td className="px-3 md:px-6 py-3 md:py-4">
+                      <span className="font-mono text-xs md:text-sm text-gray-500">#{order._id.slice(-6).toUpperCase()}</span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-3 md:py-4">
                       <div className="text-sm font-medium text-secondary">{order.email}</div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-3 md:py-4">
                       <div className="text-sm text-gray-500">
                         {order.items.map((item, i) => (
                           <div key={i}>{item.name} × {item.quantity}</div>
                         ))}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-right font-mono font-bold text-secondary">
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-right font-mono font-bold text-secondary">
                       ${order.total.toFixed(2)}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-3 md:py-4">
                       <select
                         value={order.status}
                         onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-                        className={`px-3 py-1 text-xs font-medium rounded-full capitalize border cursor-pointer ${statusColors[order.status] || 'bg-gray-100 text-gray-700 border-gray-200'}`}
+                        className={`px-2 md:px-3 py-1 text-[10px] md:text-xs font-medium rounded-full capitalize border cursor-pointer ${statusColors[order.status] || 'bg-gray-100 text-gray-700 border-gray-200'}`}
                       >
                         <option value="pending">Pending</option>
                         <option value="confirmed">Confirmed</option>
@@ -172,10 +173,10 @@ export default function OrdersPage() {
                         <option value="cancelled">Cancelled</option>
                       </select>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-sm text-gray-500">
                       {new Date(order.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-3 md:py-4">
                       <div className="flex items-center justify-center gap-2">
                         <Link 
                           href={`/admin/orders/${order._id}`}
