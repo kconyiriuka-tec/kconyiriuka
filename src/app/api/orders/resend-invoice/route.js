@@ -149,7 +149,7 @@ function generateInvoicePDF(order, jsPDF) {
     
     doc.text(item.name, margin + 10, y + 8);
     doc.text(item.quantity.toString(), margin + 350, y + 8, { align: 'center' });
-    doc.text(`$${item.price.toFixed(2)}`, margin + contentWidth - 10, y + 8, { align: 'right' });
+    doc.text(`$${item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, margin + contentWidth - 10, y + 8, { align: 'right' });
     y += 20;
   });
 
@@ -166,20 +166,20 @@ function generateInvoicePDF(order, jsPDF) {
   doc.setTextColor(100, 100, 100);
   doc.text('Subtotal:', margin + 350, y);
   doc.setTextColor(60, 60, 60);
-  doc.text(`$${order.subtotal.toFixed(2)}`, margin + contentWidth - 10, y, { align: 'right' });
+  doc.text(`$${order.subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, margin + contentWidth - 10, y, { align: 'right' });
   y += 18;
 
   doc.setTextColor(100, 100, 100);
   doc.text('Processing Fee (5%):', margin + 350, y);
   doc.setTextColor(60, 60, 60);
-  doc.text(`$${processingFee.toFixed(2)}`, margin + contentWidth - 10, y, { align: 'right' });
+  doc.text(`$${processingFee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, margin + contentWidth - 10, y, { align: 'right' });
   y += 18;
 
   if (shippingCost > 0) {
     doc.setTextColor(100, 100, 100);
     doc.text(`Shipping${order.shippingOption ? ' (' + order.shippingOption + ')' : ''}:`, margin + 350, y);
     doc.setTextColor(60, 60, 60);
-    doc.text(`$${shippingCost.toFixed(2)}`, margin + contentWidth - 10, y, { align: 'right' });
+    doc.text(`$${shippingCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, margin + contentWidth - 10, y, { align: 'right' });
     y += 18;
   }
 
@@ -193,7 +193,7 @@ function generateInvoicePDF(order, jsPDF) {
   doc.setTextColor(...primaryColor);
   doc.text('Total:', margin + 350, y);
   doc.setTextColor(accentColor[0], accentColor[1], accentColor[2]);
-  doc.text(`$${order.total.toFixed(2)}`, margin + contentWidth - 10, y, { align: 'right' });
+  doc.text(`$${order.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, margin + contentWidth - 10, y, { align: 'right' });
 
   y += 40;
 

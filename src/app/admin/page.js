@@ -118,7 +118,7 @@ export default function AdminDashboard() {
             </div>
             <div>
               <p className="text-[10px] md:text-xs text-gray-500 uppercase">Revenue</p>
-              <p className="text-lg md:text-2xl font-bold text-secondary truncate">${totalRevenue.toFixed(2)}</p>
+              <p className="text-lg md:text-2xl font-bold text-secondary truncate">${totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             </div>
           </div>
         </div>
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
             <div>
               <p className="text-[10px] md:text-xs text-gray-500 uppercase">Profit</p>
               <p className={`text-lg md:text-2xl font-bold truncate ${totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                {totalProfit >= 0 ? '+' : '-'}${Math.abs(totalProfit).toFixed(2)}
+                {totalProfit >= 0 ? '+' : '-'}${Math.abs(totalProfit).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
           </div>
@@ -147,15 +147,15 @@ export default function AdminDashboard() {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-gray-500">Cost Value</span>
-              <span className="font-bold">${inventoryCostValue.toFixed(2)}</span>
+              <span className="font-bold">${inventoryCostValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-500">Retail Value</span>
-              <span className="font-bold">${inventoryRetailValue.toFixed(2)}</span>
+              <span className="font-bold">${inventoryRetailValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
             </div>
             <div className="flex justify-between items-center pt-3 border-t border-gray-100">
               <span className="text-gray-500">Potential Profit</span>
-              <span className="font-bold text-green-600">+${(inventoryRetailValue - inventoryCostValue).toFixed(2)}</span>
+              <span className="font-bold text-green-600">+${(inventoryRetailValue - inventoryCostValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
             </div>
           </div>
         </div>
@@ -209,7 +209,7 @@ export default function AdminDashboard() {
                     <div className="text-xs text-gray-400">{order.email}</div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">{order.items.length} items</td>
-                  <td className="px-6 py-4 text-right font-mono font-bold text-secondary">${order.total.toFixed(2)}</td>
+                  <td className="px-6 py-4 text-right font-mono font-bold text-secondary">${order.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td className="px-6 py-4 text-center">
                     <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full capitalize ${
                       order.status === 'confirmed' ? 'bg-green-100 text-green-700' :

@@ -62,18 +62,18 @@ export default function ProfitPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
           <p className="text-xs text-gray-500 uppercase font-medium">Total Revenue</p>
-          <p className="text-3xl font-bold text-secondary mt-1">${totalRevenue.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-secondary mt-1">${totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           <p className="text-xs text-gray-400 mt-2">Gross Sales</p>
         </div>
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
           <p className="text-xs text-gray-500 uppercase font-medium">COGS</p>
-          <p className="text-3xl font-bold text-gray-600 mt-1">${totalCOGS.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-gray-600 mt-1">${totalCOGS.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           <p className="text-xs text-gray-400 mt-2">Cost of Goods Sold</p>
         </div>
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
           <p className="text-xs text-gray-500 uppercase font-medium">Net Profit</p>
           <p className={`text-3xl font-bold mt-1 ${netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-            {netProfit >= 0 ? '+' : '-'}${Math.abs(netProfit).toFixed(2)}
+            {netProfit >= 0 ? '+' : '-'}${Math.abs(netProfit).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
           <p className="text-xs text-gray-400 mt-2">Revenue - Costs</p>
         </div>
@@ -92,7 +92,7 @@ export default function ProfitPage() {
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden">
           <div className="relative z-10">
             <p className="text-sm font-medium text-gray-500">Inventory Cost Basis</p>
-            <p className="text-2xl font-bold text-secondary mt-1">${inventoryCostValue.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-secondary mt-1">${inventoryCostValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             <p className="text-xs text-gray-400 mt-1">Value of unsold stock at cost</p>
           </div>
           <div className="absolute right-0 bottom-0 opacity-5">
@@ -106,7 +106,7 @@ export default function ProfitPage() {
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden">
           <div className="relative z-10">
             <p className="text-sm font-medium text-gray-500">Projected Retail Value</p>
-            <p className="text-2xl font-bold text-secondary mt-1">${inventoryRetailValue.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-secondary mt-1">${inventoryRetailValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             <p className="text-xs text-gray-400 mt-1">Value if all stock sells today</p>
           </div>
           <div className="absolute right-0 bottom-0 opacity-5">
@@ -121,7 +121,7 @@ export default function ProfitPage() {
         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden">
           <div className="relative z-10">
             <p className="text-sm font-medium text-gray-500">Potential Future Profit</p>
-            <p className="text-2xl font-bold text-green-600 mt-1">+${potentialProfit.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-green-600 mt-1">+${potentialProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             <p className="text-xs text-gray-400 mt-1">From remaining inventory</p>
           </div>
           <div className="absolute right-0 bottom-0 opacity-5">
@@ -159,13 +159,13 @@ export default function ProfitPage() {
                       <div className="text-[10px] md:text-xs text-gray-400 uppercase">{product.sub}</div>
                     </td>
                     <td className="px-3 md:px-6 py-3 md:py-4 text-right font-mono text-gray-500 text-sm md:text-base">
-                      ${(product.costPrice || 0).toFixed(2)}
+                      ${(product.costPrice || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="px-3 md:px-6 py-3 md:py-4 text-right font-mono text-secondary text-sm md:text-base">
-                      ${product.price.toFixed(2)}
+                      ${product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="px-3 md:px-6 py-3 md:py-4 text-right">
-                      <span className="font-bold text-green-600 text-sm md:text-base">+${margin.toFixed(2)}</span>
+                      <span className="font-bold text-green-600 text-sm md:text-base">+${margin.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                       <span className="text-[10px] md:text-xs text-gray-400 ml-1 md:ml-2 block md:inline">({marginPercent}%)</span>
                     </td>
                   </tr>

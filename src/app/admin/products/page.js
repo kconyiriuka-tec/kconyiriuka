@@ -449,10 +449,10 @@ export default function ProductsPage() {
                       </div>
                     </td>
                     <td className="px-3 md:px-6 py-3 md:py-4 text-right font-mono text-gray-500 text-sm md:text-base">
-                      ${(product.costPrice || 0).toFixed(2)}
+                      ${(product.costPrice || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="px-3 md:px-6 py-3 md:py-4 text-right font-mono font-bold text-secondary text-sm md:text-base">
-                      ${product.price.toFixed(2)}
+                      ${product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="px-3 md:px-6 py-3 md:py-4">
                       <div className="flex items-center justify-center gap-1">

@@ -15,7 +15,7 @@ export async function sendOrderConfirmation(order) {
     `<tr>
       <td style="padding: 12px 8px; border-bottom: 1px solid #eee;">${item.name}</td>
       <td style="padding: 12px 8px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
-      <td style="padding: 12px 8px; border-bottom: 1px solid #eee; text-align: right;">$${item.price.toFixed(2)}</td>
+      <td style="padding: 12px 8px; border-bottom: 1px solid #eee; text-align: right;">$${item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
     </tr>`
   ).join('');
 
@@ -99,11 +99,11 @@ export async function sendOrderConfirmation(order) {
               <table style="width: 100%; font-size: 14px;">
                 <tr>
                   <td style="padding: 4px 12px 4px 0; color: #666;">Subtotal:</td>
-                  <td style="padding: 4px 0; text-align: right; white-space: nowrap;">$${order.subtotal.toFixed(2)}</td>
+                  <td style="padding: 4px 0; text-align: right; white-space: nowrap;">$${order.subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                 </tr>
                 <tr>
                   <td style="padding: 4px 12px 4px 0; color: #666;">Processing Fee (5%):</td>
-                  <td style="padding: 4px 0; text-align: right; white-space: nowrap;">$${processingFee.toFixed(2)}</td>
+                  <td style="padding: 4px 0; text-align: right; white-space: nowrap;">$${processingFee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                 </tr>
                 ${shippingCost > 0 ? `
                 <tr>
@@ -111,12 +111,12 @@ export async function sendOrderConfirmation(order) {
                     Shipping:
                     ${order.shippingOption ? `<br><span style="font-size: 12px; color: #888; font-weight: normal;">${order.shippingOption}</span>` : ''}
                   </td>
-                  <td style="padding: 4px 0; text-align: right; vertical-align: top; white-space: nowrap;">$${shippingCost.toFixed(2)}</td>
+                  <td style="padding: 4px 0; text-align: right; vertical-align: top; white-space: nowrap;">$${shippingCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                 </tr>
                 ` : ''}
                 <tr style="font-size: 18px; font-weight: bold;">
                   <td style="padding: 12px 12px 0 0; color: #0B2E27;">Total:</td>
-                  <td style="padding: 12px 0 0 0; text-align: right; color: #41DAC1; white-space: nowrap;">$${order.total.toFixed(2)}</td>
+                  <td style="padding: 12px 0 0 0; text-align: right; color: #41DAC1; white-space: nowrap;">$${order.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                 </tr>
               </table>
             </div>
@@ -173,7 +173,7 @@ export async function sendInvoiceWithPDF(order, pdfBuffer) {
           </p>
           <p style="color: #666; margin: 0 0 15px 0;">
             <strong>Invoice #:</strong> ${orderNumber}<br>
-            <strong>Total:</strong> $${order.total.toFixed(2)}
+            <strong>Total:</strong> $${order.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
           <p style="color: #666; font-size: 14px; margin: 20px 0 0 0;">
             If you have any questions, please contact us at 
@@ -199,20 +199,20 @@ export async function sendInvoiceWithPDF(order, pdfBuffer) {
 
 export async function sendAdminOrderAlert(order) {
   const itemsHtml = order.items.map(item => 
-    `<li>${item.quantity}x ${item.name} ($${item.price.toFixed(2)})</li>`
+    `<li>${item.quantity}x ${item.name} ($${item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</li>`
   ).join('');
 
   const mailOptions = {
     from: `"BioVibe Peptides System" <support@biovibepeptides.com>`,
     to: 'support@biovibepeptides.com',
-    subject: `🚨 New Order Alert! #${order._id.toString().slice(-8).toUpperCase()} - $${order.total.toFixed(2)}`,
+    subject: `🚨 New Order Alert! #${order._id.toString().slice(-8).toUpperCase()} - $${order.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
     html: `
       <div style="font-family: Arial, sans-serif; padding: 20px;">
         <h2 style="color: #0B2E27;">New Order Received</h2>
         <p><strong>Order ID:</strong> #${order._id.toString().slice(-8).toUpperCase()}</p>
         <p><strong>Customer:</strong> ${order.firstName} ${order.lastName}</p>
         <p><strong>Practice:</strong> ${order.practiceName || 'N/A'}</p>
-        <p><strong>Total:</strong> $${order.total.toFixed(2)}</p>
+        <p><strong>Total:</strong> $${order.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
         
         <h3>Items:</h3>
         <ul>${itemsHtml}</ul>

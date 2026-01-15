@@ -158,7 +158,7 @@ export default function OrdersPage() {
                       </div>
                     </td>
                     <td className="px-3 md:px-6 py-3 md:py-4 text-right font-mono font-bold text-secondary">
-                      ${order.total.toFixed(2)}
+                      ${order.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </td>
                     <td className="px-3 md:px-6 py-3 md:py-4">
                       <select
